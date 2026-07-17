@@ -11,15 +11,16 @@ A comprehensive, robust REST API for managing VpnHood users, built with Node.js 
 
 ## API Endpoints
 
-### Authentication (Public)
+### Public Endpoints
 
-| Method | Endpoint                  | Description                                  | Payload                           |
-| ------ | ------------------------- | -------------------------------------------- | --------------------------------- |
-| `POST` | `/api/auth/signup`        | Create a new admin account.                  | JSON: `name`, `email`, `password` |
-| `POST` | `/api/auth/login`         | Login and receive auth cookies.              | JSON: `email`, `password`         |
-| `POST` | `/api/auth/logout`        | Clear auth cookies and revoke refresh token. | None                              |
-| `GET`  | `/api/auth/getAuthStatus` | Check if the current session is valid.       | None (reads cookie)               |
-| `POST` | `/api/auth/refresh`       | Rotate access & refresh tokens.              | None (reads cookie)               |
+| Method | Endpoint | Description | Payload |
+|--------|----------|-------------|---------|
+| `POST` | `/api/auth/signup` | Create a new admin account. | JSON: `name`, `email`, `password` |
+| `POST` | `/api/auth/login` | Login and receive auth cookies. | JSON: `email`, `password` |
+| `POST` | `/api/auth/logout` | Clear auth cookies and revoke refresh token. | None |
+| `GET` | `/api/auth/getAuthStatus` | Check if the current session is valid. | None (reads cookie) |
+| `POST` | `/api/auth/refresh` | Rotate access & refresh tokens. | None (reads cookie) |
+| `POST` | `/api/webhook/update` | Pulls the latest code from GitHub, runs npm install, and restarts the server via PM2. | JSON: `secret` (Must match `WEBHOOK_SECRET` in `.env`) |
 
 ### VPN Management (Protected — requires login)
 
@@ -29,7 +30,6 @@ A comprehensive, robust REST API for managing VpnHood users, built with Node.js 
 | `GET`    | `/api/users/:tokenId` | Fetches detailed data for a specific user and their `vh://` connection string.        | `tokenId` (URL Param)                                                         |
 | `POST`   | `/api/users`          | Generates a new VPN user token.                                                       | JSON: `name` (req), `maxTrafficMB`, `maxClient`, `maxSpeedMbps`, `expireDate` |
 | `DELETE` | `/api/users/:tokenId` | Revokes a user's VPN access instantly by deleting their token file.                   | `tokenId` (URL Param)                                                         |
-| `POST`   | `/api/webhook/update` | Pulls the latest code from GitHub, runs npm install, and restarts the server via PM2. | JSON: `secret` (Must match `WEBHOOK_SECRET` in `.env`)                        |
 
 ### Health Check (Public)
 

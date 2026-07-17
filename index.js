@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import connectToMongo from "./src/db.js";
 import authRouter from "./src/router/authRoute.js";
 import vpnRouter from "./src/router/vpnRoute.js";
+import webhookRouter from "./src/router/webhookRoute.js";
 import { AuthApi } from "./src/middleware/AuthApi.js";
 import formatSeconds from "./src/utils/formatSeconds.js";
 
@@ -55,6 +56,9 @@ app.get("/", (req, res) => {
 
 // Auth routes (public)
 app.use("/api/auth", authRouter);
+
+// Webhook routes (public — secured by WEBHOOK_SECRET)
+app.use("/api", webhookRouter);
 
 // VPN management routes (protected — requires valid JWT)
 app.use("/api", AuthApi, vpnRouter);
