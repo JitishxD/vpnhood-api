@@ -113,6 +113,12 @@ export const Login = async (req, res) => {
 };
 
 export const Signup = async (req, res) => {
+  // TODO: Remove this early return to enable signups again
+  return res.status(403).json({
+    message: "Signup is currently disabled",
+    success: false,
+  });
+
   try {
     const { name, email, password } = req.body;
 
