@@ -147,6 +147,13 @@ api.yourdomain.com {
 
 _(Make sure to point your DNS A record to your VPS IP)._
 
+Format and validate your Caddyfile to ensure there are no syntax errors:
+
+```bash
+sudo caddy fmt --overwrite /etc/caddy/Caddyfile
+sudo caddy validate --config /etc/caddy/Caddyfile
+```
+
 Restart Caddy to apply changes:
 
 ```bash

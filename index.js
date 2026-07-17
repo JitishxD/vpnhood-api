@@ -27,7 +27,9 @@ if (process.env.NODE_ENV !== "production") {
 } else {
   app.use(
     cors({
-      origin: process.env.CORS_ORIGIN || true,
+      origin: process.env.CORS_ORIGIN
+        ? process.env.CORS_ORIGIN.split(",")
+        : true,
       credentials: true,
     }),
   );
