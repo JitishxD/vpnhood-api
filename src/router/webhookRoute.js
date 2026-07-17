@@ -2,6 +2,7 @@ import express from "express";
 import { exec } from "child_process";
 import util from "util";
 import dotenv from "dotenv";
+import { webhookLogger } from "../utils/webhookLogger.js";
 
 dotenv.config();
 
@@ -35,24 +36,34 @@ router.post("/webhook/update", async (req, res) => {
     // Send success response immediately before we kill the process
     res.json({
       success: true,
-      message: "Update initiated. Server will pull changes and restart.",
+      message:
+        "Update initiated. Server will pull changes and restart. Check logs/webhook.log for details.",
     });
 
     // Run the update sequence asynchronously
     setTimeout(async () => {
+      webhookLogger.start();
+
       try {
-        console.log("--- Webhook Triggered: Updating Server ---");
-        console.log("Executing git pull...");
-        await execAsync("git pull");
+        // Step 1: Git Pull
+        webhookLogger.step("Executing git pull...");
+        const gitResult = await execAsync("git pull");
+        webhookLogger.success("git pull completed", gitResult.stdout.trim());
 
-        console.log("Executing npm install...");
-        await execAsync("npm install");
+        // Step 2: npm install
+        webhookLogger.step("Executing npm install...");
+        const npmResult = await execAsync("npm install");
+        webhookLogger.success("npm install completed", npmResult.stdout.trim());
 
-        console.log("Update complete. Restarting via PM2 (Process Exit)...");
+        // Step 3: Restart
+        webhookLogger.step("Restarting server via PM2 (process.exit)...");
+        webhookLogger.end("SUCCESS");
+
         // Exiting the process will cause PM2 to automatically restart it with the new code
         process.exit(0);
       } catch (err) {
-        console.error("Failed during auto-update sequence:", err);
+        webhookLogger.error("Update sequence failed", err);
+        webhookLogger.end("FAILED");
       }
     }, 1000);
   } catch (error) {

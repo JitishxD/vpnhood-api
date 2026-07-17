@@ -7,7 +7,7 @@ A comprehensive, robust REST API for managing VpnHood users, built with Node.js 
 - **Full User Management**: Complete CRUD capabilities for VpnHood access keys.
 - **Quota & Tracking**: View dynamic bandwidth usage, max connections, and expiration states.
 - **JWT Authentication**: Secure cookie-based auth with access/refresh token rotation and MongoDB-backed user accounts.
-- **Auto-Updating**: Built-in webhook endpoint to pull the latest code and restart via CI/CD pipelines.
+- **Auto-Updating**: Built-in webhook endpoint to pull the latest code and restart via CI/CD pipelines. All updates are logged to `logs/webhook.log`.
 
 ## API Endpoints
 
