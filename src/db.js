@@ -21,6 +21,8 @@ const connectToMongo = async () => {
     })
     .then(() => {
       console.log("Successfully connected to MongoDB Atlas!");
+      console.log(` -> Host: ${mongoose.connection.host}`);
+      console.log(` -> Database: ${mongoose.connection.name}`);
       return mongoose.connection;
     })
     .catch((error) => {
