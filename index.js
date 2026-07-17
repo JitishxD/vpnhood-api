@@ -13,7 +13,7 @@ import formatSeconds from "./src/utils/formatSeconds.js";
 dotenv.config();
 
 const app = express();
-app.set("trust proxy", true); // Trust the X-Forwarded-* headers from Caddy so rate limiting tracks real IPs
+app.set("trust proxy", 1); // Trust the X-Forwarded-* headers from exactly one hop (Caddy) to prevent IP spoofing
 const port = process.env.PORT || 5000;
 
 function parsePositiveInteger(value, fallback) {
