@@ -12,7 +12,15 @@ if (!fs.existsSync(LOG_DIR)) {
 }
 
 const getTimestamp = () => {
-  return new Date().toISOString();
+  return new Date().toLocaleString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  });
 };
 
 const formatLogEntry = (level, message, details = null) => {
