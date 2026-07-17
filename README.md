@@ -8,6 +8,7 @@ A comprehensive, robust REST API for managing VpnHood users, built with Node.js 
 - **Quota & Tracking**: View dynamic bandwidth usage, max connections, and expiration states.
 - **JWT Authentication**: Secure cookie-based auth with access/refresh token rotation and MongoDB-backed user accounts.
 - **Auto-Updating**: Built-in webhook endpoint to pull the latest code and restart via CI/CD pipelines. All updates are logged to `logs/webhook.log`.
+- **Rate Limiting**: Protects all API routes from brute-force and DDoS attacks.
 
 ## API Endpoints
 
@@ -108,7 +109,7 @@ cp .env.example .env
 nano .env
 ```
 
-You **must** set: `MONGODB_URI`, `TOKEN_SECRET`, `REFRESH_TOKEN_SECRET`, `WEBHOOK_SECRET`, and `CORS_ORIGIN`.
+You **must** set: `MONGODB_URI`, `TOKEN_SECRET`, `REFRESH_TOKEN_SECRET`, `WEBHOOK_SECRET`, `CORS_ORIGIN`, `RATE_LIMIT_WINDOW_MS`, and `RATE_LIMIT_MAX`.
 
 ### 5. Install Dependencies & Start the API
 

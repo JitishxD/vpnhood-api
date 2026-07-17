@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { rateLimit } from "express-rate-limit";
 import dotenv from "dotenv";
 import connectToMongo from "./src/db.js";
 import authRouter from "./src/router/authRoute.js";
@@ -13,6 +14,28 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5000;
+
+function parsePositiveInteger(value, fallback) {
+  const parsed = Number(value);
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
+}
+
+const rateLimitWindowMs = parsePositiveInteger(
+  process.env.RATE_LIMIT_WINDOW_MS,
+  15 * 60 * 1000,
+);
+const rateLimitMax = parsePositiveInteger(process.env.RATE_LIMIT_MAX, 100);
+
+app.use(
+  "/api",
+  rateLimit({
+    windowMs: rateLimitWindowMs,
+    limit: rateLimitMax,
+    standardHeaders: "draft-7",
+    legacyHeaders: false,
+    message: { message: "Too many requests. Please try again later." },
+  }),
+);
 
 app.use(express.json());
 app.use(cookieParser());
