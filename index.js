@@ -13,6 +13,7 @@ import formatSeconds from "./src/utils/formatSeconds.js";
 dotenv.config();
 
 const app = express();
+app.set("trust proxy", true); // Trust the X-Forwarded-* headers from Caddy so rate limiting tracks real IPs
 const port = process.env.PORT || 5000;
 
 function parsePositiveInteger(value, fallback) {
@@ -74,6 +75,14 @@ app.get("/", (req, res) => {
   res.json({
     uptime: process.uptime(),
     uptimeFormatted: formatSeconds(process.uptime()),
+  });
+});
+
+// Test endpoint to verify rate limiting and IP forwarding (public)
+app.get("/api/ip", (req, res) => {
+  res.json({
+    ip: req.ip,
+    forwardedFor: req.headers["x-forwarded-for"],
   });
 });
 
